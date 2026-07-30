@@ -64,3 +64,8 @@
     overflow:hidden;
   }
 }
+
+/* Fact-only profile presentation */
+.detail-list dt{font-weight:700;margin-top:14px}
+.detail-list dd{margin:4px 0 0}
+.card .desc{font-weight:500}
