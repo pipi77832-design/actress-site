@@ -35,13 +35,26 @@ function renderPager(page, totalPages) {
 
 // 新システムが追加した作品(communityNoteを持つ)は「選択画像の1枚目+一言」のみのカードにする。
 // images(選択順の配列)の先頭を一覧カードの画像として使う。枚数は固定しない。
-// 既存30件は従来どおりのカード(id/title/meta/description/button)のまま変更しない。
+// このカードの構造・表示仕様には今回手を加えない。
+//
+// 既存の女優カードは、DMM公式ActressSearch API由来の実データ(name/ruby/height/bust/cup/
+// waist/hip/birthday)だけを表示する。DMMから取得できなかった項目は表示自体を省略し、
+// 推測値・旧ダミー値は一切残さない。
 function renderCard(item) {
   if (typeof item.communityNote === "string") {
     const firstImage = Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : "";
     return `<a class="card card-new" href="detail.html?id=${encodeURIComponent(item.id)}"><img src="${escapeHtml(firstImage)}" alt=""><div class="card-body"><p class="desc">${escapeHtml(item.communityNote)}</p></div></a>`;
   }
-  return `<article class="card"><img src="${item.image}" alt=""><div class="card-body"><h2>${item.title}</h2><div class="meta">${item.meta}</div><p class="desc">${item.description}</p><a class="button" href="detail.html?id=${item.id}">詳しく見る</a></div></article>`;
+
+  const facts = [];
+  if (item.birthday) facts.push(`<div><dt>生年月日</dt><dd>${escapeHtml(item.birthday)}</dd></div>`);
+  if (item.height) facts.push(`<div><dt>身長</dt><dd>${escapeHtml(item.height)}</dd></div>`);
+  if (item.bust && item.waist && item.hip) {
+    facts.push(`<div><dt>B/W/H</dt><dd>${escapeHtml(item.bust)}/${escapeHtml(item.waist)}/${escapeHtml(item.hip)}</dd></div>`);
+  }
+  if (item.cup) facts.push(`<div><dt>カップ</dt><dd>${escapeHtml(item.cup)}</dd></div>`);
+
+  return `<article class="card"><img src="${escapeHtml(item.image)}" alt=""><div class="card-body"><h2>${escapeHtml(item.title)}</h2><p class="ruby">${escapeHtml(item.ruby)}</p><dl class="facts">${facts.join("")}</dl><a class="button" href="detail.html?id=${encodeURIComponent(item.id)}">詳しく見る</a></div></article>`;
 }
 
 fetch("data/items.json")

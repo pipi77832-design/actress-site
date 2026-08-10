@@ -28,6 +28,13 @@ fetch("data/items.json")
       return;
     }
 
+    // 既存の女優詳細も、DMM公式ActressSearch API由来の実データだけを表示する。
+    // DMMから取得できなかった項目(生年月日・身長・B/W/H・カップ)は行ごと省略する。
     document.title = x.title;
-    detail.innerHTML = `<div class="detail-layout"><img src="${x.image}" alt=""><div><h1>${x.title}</h1><p class="meta">${x.meta}</p><dl>${x.details.map((d) => `<dt>${d[0]}</dt><dd>${d[1]}</dd>`).join("")}</dl></div></div>`;
+    const facts = [];
+    if (x.birthday) facts.push(["生年月日", x.birthday]);
+    if (x.height) facts.push(["身長", x.height]);
+    if (x.bust && x.waist && x.hip) facts.push(["B/W/H", `${x.bust}/${x.waist}/${x.hip}`]);
+    if (x.cup) facts.push(["カップ", x.cup]);
+    detail.innerHTML = `<div class="detail-layout"><img src="${escapeHtml(x.image)}" alt=""><div><h1>${escapeHtml(x.title)}</h1><p class="meta">${escapeHtml(x.ruby)}</p><dl>${facts.map((d) => `<dt>${escapeHtml(d[0])}</dt><dd>${escapeHtml(d[1])}</dd>`).join("")}</dl></div></div>`;
   });
