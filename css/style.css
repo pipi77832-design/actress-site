@@ -69,3 +69,12 @@
 .detail-list dt{font-weight:700;margin-top:14px}
 .detail-list dd{margin:4px 0 0}
 .card .desc{font-weight:500}
+
+/* 新システムが追加した作品(画像+一言のみのカード/画像+こちらから+リンクURLのみの詳細) */
+.card-new{text-decoration:none;color:inherit}
+.detail-new-image-link{display:block}
+.detail-new-subimages{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0 0}
+.detail-new-subimage-link{display:block;width:76px}
+.detail-new-subimage{width:76px;height:76px;object-fit:cover;border-radius:8px;display:block}
+.detail-new-label{font-size:16px;font-weight:800;margin:18px 0 10px;text-align:center}
+.detail-new-link{display:block;text-align:center;color:#2d6cdf;text-decoration:underline;font-size:14px;word-break:break-all}

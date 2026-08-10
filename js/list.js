@@ -1,1 +1,55 @@
-fetch('data/items.json').then(r=>r.json()).then(items=>{const page=Number(document.body.dataset.page||1);const shown=items.slice((page-1)*10,page*10);document.getElementById('grid').innerHTML=shown.map(x=>`<article class="card"><img src="${x.image}" alt=""><div class="card-body"><h2>${x.title}</h2><div class="meta">${x.meta}</div><p class="desc">${x.description}</p><a class="button" href="detail.html?id=${x.id}">詳しく見る</a></div></article>`).join('');});
+const escapeHtml = (value) =>
+  String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+const grid = document.getElementById("grid");
+const pagerEl = document.getElementById("pager");
+
+// ページ1〜3は既存の物理ファイル(index.html/page2.html/page3.html)のURLを維持する。
+// 4ページ目以降はファイルを増やさず、index.html?page=Nで自動的に成立させる。
+function pageHref(n) {
+  if (n === 1) return "index.html";
+  if (n === 2) return "page2.html";
+  if (n === 3) return "page3.html";
+  return `index.html?page=${n}`;
+}
+
+function resolveCurrentPage() {
+  const queryPage = Number(new URLSearchParams(location.search).get("page"));
+  if (Number.isFinite(queryPage) && queryPage > 0) return queryPage;
+  return Number(document.body.dataset.page || 1);
+}
+
+function renderPager(page, totalPages) {
+  if (!pagerEl) return;
+  let html = "";
+  if (page > 1) html += `<a href="${pageHref(page - 1)}">前へ</a>`;
+  if (page < totalPages) html += `<a href="${pageHref(page + 1)}">次へ</a>`;
+  pagerEl.innerHTML = html;
+}
+
+// 新システムが追加した作品(communityNoteを持つ)は「選択画像の1枚目+一言」のみのカードにする。
+// images(選択順の配列)の先頭を一覧カードの画像として使う。枚数は固定しない。
+// 既存30件は従来どおりのカード(id/title/meta/description/button)のまま変更しない。
+function renderCard(item) {
+  if (typeof item.communityNote === "string") {
+    const firstImage = Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : "";
+    return `<a class="card card-new" href="detail.html?id=${encodeURIComponent(item.id)}"><img src="${escapeHtml(firstImage)}" alt=""><div class="card-body"><p class="desc">${escapeHtml(item.communityNote)}</p></div></a>`;
+  }
+  return `<article class="card"><img src="${item.image}" alt=""><div class="card-body"><h2>${item.title}</h2><div class="meta">${item.meta}</div><p class="desc">${item.description}</p><a class="button" href="detail.html?id=${item.id}">詳しく見る</a></div></article>`;
+}
+
+fetch("data/items.json")
+  .then((r) => r.json())
+  .then((items) => {
+    const page = resolveCurrentPage();
+    const totalPages = Math.max(1, Math.ceil(items.length / 10));
+    const shown = items.slice((page - 1) * 10, page * 10);
+    grid.innerHTML = shown.map(renderCard).join("");
+    renderPager(page, totalPages);
+  });

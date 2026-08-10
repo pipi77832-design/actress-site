@@ -1,1 +1,33 @@
-const id=Number(new URLSearchParams(location.search).get('id'));fetch('data/items.json').then(r=>r.json()).then(items=>{const x=items.find(v=>v.id===id)||items[0];document.title=x.title;document.getElementById('detail').innerHTML=`<div class="detail-layout"><img src="${x.image}" alt=""><div><h1>${x.title}</h1><p class="meta">${x.meta}</p><dl>${x.details.map(d=>`<dt>${d[0]}</dt><dd>${d[1]}</dd>`).join('')}</dl></div></div>`;});
+const escapeHtml = (value) =>
+  String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+const id = Number(new URLSearchParams(location.search).get("id"));
+
+fetch("data/items.json")
+  .then((r) => r.json())
+  .then((items) => {
+    const x = items.find((v) => v.id === id) || items[0];
+    const detail = document.getElementById("detail");
+
+    // 新システムが追加した作品(communityNoteを持つ)は「1枚目を大きく+2枚目以降を下に並べる+こちらから+リンクURL」のみを表示する。
+    // 画像枚数は固定しない(1枚だけの場合は大きい画像のみ)。どの画像をタップしても同じリンクURLへ遷移する。
+    // 既存30件は従来どおりの詳細描画のまま変更しない。
+    if (typeof x.communityNote === "string") {
+      const images = Array.isArray(x.images) ? x.images : [];
+      const affiliateUrl = x.affiliateUrl || "";
+      const subImagesHtml = images.length > 1
+        ? `<div class="detail-new-subimages">${images.slice(1).map((img) => `<a class="detail-new-subimage-link" href="${escapeHtml(affiliateUrl)}"><img class="detail-new-subimage" src="${escapeHtml(img)}" alt=""></a>`).join("")}</div>`
+        : "";
+      detail.innerHTML = `<div class="detail-new"><a class="detail-new-image-link" href="${escapeHtml(affiliateUrl)}"><img class="detail-new-image" src="${escapeHtml(images[0] || "")}" alt=""></a>${subImagesHtml}<p class="detail-new-label">こちらから👇🏻</p><a class="detail-new-link" href="${escapeHtml(affiliateUrl)}">${escapeHtml(affiliateUrl)}</a></div>`;
+      return;
+    }
+
+    document.title = x.title;
+    detail.innerHTML = `<div class="detail-layout"><img src="${x.image}" alt=""><div><h1>${x.title}</h1><p class="meta">${x.meta}</p><dl>${x.details.map((d) => `<dt>${d[0]}</dt><dd>${d[1]}</dd>`).join("")}</dl></div></div>`;
+  });
