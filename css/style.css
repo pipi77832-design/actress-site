@@ -83,6 +83,7 @@
 
 /* 新システムが追加した作品(画像+一言のみのカード/画像+こちらから+リンクURLのみの詳細) */
 .card-new{text-decoration:none;color:inherit}
+body.detail-fanza header,body.detail-fanza footer{display:none}
 .detail-new-image-link{display:block}
 .detail-new-subimages{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0 0}
 .detail-new-subimage-link{display:block;width:76px}

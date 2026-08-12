@@ -43,7 +43,7 @@ function renderPager(page, totalPages) {
 function renderCard(item) {
   if (typeof item.communityNote === "string") {
     const firstImage = Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : "";
-    return `<a class="card card-new" href="detail.html?id=${encodeURIComponent(item.id)}"><img src="${escapeHtml(firstImage)}" alt=""><div class="card-body"><p class="desc">${escapeHtml(item.communityNote)}</p></div></a>`;
+    return `<a class="card card-new" href="detail.html?id=${encodeURIComponent(item.id)}"><img src="${escapeHtml(firstImage)}" alt=""><div class="card-body"><p class="desc">${escapeHtml(item.communityNote)}</p><span class="button">詳しく見る</span></div></a>`;
   }
 
   const facts = [];

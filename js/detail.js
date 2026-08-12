@@ -19,6 +19,7 @@ fetch("data/items.json")
     // 画像枚数は固定しない(1枚だけの場合は大きい画像のみ)。どの画像をタップしても同じリンクURLへ遷移する。
     // 既存30件は従来どおりの詳細描画のまま変更しない。
     if (typeof x.communityNote === "string") {
+      document.body.classList.add("detail-fanza");
       const images = Array.isArray(x.images) ? x.images : [];
       const affiliateUrl = x.affiliateUrl || "";
       const subImagesHtml = images.length > 1
