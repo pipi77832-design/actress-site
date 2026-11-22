@@ -33,7 +33,11 @@ function renderPager(page, totalPages) {
 
 function workCard(item) {
   const aff = escapeHtmlWorks(item.affiliateUrl);
-  return `<article class="card daily-card"><a href="${aff}" target="_blank" rel="sponsored noopener"><img src="${escapeHtmlWorks(item.image)}" alt=""></a><div class="card-body"><p class="daily-off">${item.off}%OFF</p><h2>${escapeHtmlWorks(item.title)}</h2><p class="meta">¥${Number(item.price).toLocaleString()}（通常 ¥${Number(item.list_price).toLocaleString()}）</p><p class="meta works-date">${escapeHtmlWorks(item.date_label || "")}紹介</p><a class="button" href="${aff}" target="_blank" rel="sponsored noopener">作品ページを見る</a></div></article>`;
+  const offBadge = item.off > 0 ? `<p class="daily-off">${item.off}%OFF</p>` : "";
+  const priceLine = item.off > 0
+    ? `¥${Number(item.price).toLocaleString()}（通常 ¥${Number(item.list_price).toLocaleString()}）`
+    : `¥${Number(item.price).toLocaleString()}`;
+  return `<article class="card daily-card"><a href="${aff}" target="_blank" rel="sponsored noopener"><img src="${escapeHtmlWorks(item.image)}" alt=""></a><div class="card-body">${offBadge}<h2>${escapeHtmlWorks(item.title)}</h2><p class="meta">${priceLine}</p><p class="meta works-date">${escapeHtmlWorks(item.date_label || "")}紹介</p><a class="button" href="${aff}" target="_blank" rel="sponsored noopener">作品ページを見る</a></div></article>`;
 }
 
 fetch(`data/works_${siteKey}.json`)
