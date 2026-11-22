@@ -81,3 +81,12 @@ body.detail-fanza header,body.detail-fanza footer{display:none}
 .detail-new-subimage{width:76px;height:76px;object-fit:cover;border-radius:8px;display:block}
 .detail-new-label{font-size:16px;font-weight:800;margin:18px 0 10px;text-align:center}
 .detail-new-link{display:block;text-align:center;color:#2d6cdf;text-decoration:underline;font-size:14px;word-break:break-all}
+
+/* 今日のセール(FANZA/MGS別) */
+.daily-block{padding:14px 0 2px}
+.daily-title{font-size:22px;margin:8px 0 2px}
+.daily-date{font-size:14px;color:#888;margin-left:10px;font-weight:400}
+.daily-off{display:inline-block;background:#ff5470;color:#fff;font-weight:800;font-size:13px;padding:3px 10px;border-radius:999px;margin:0 0 8px;align-self:flex-start}
+.grid.daily-grid{padding:8px 0 10px}
+.grid.daily-grid .card img{aspect-ratio:auto;height:auto;max-height:460px;object-fit:cover}
+@media (max-width:719px){.grid.daily-grid .card img{height:auto;max-height:300px}}
