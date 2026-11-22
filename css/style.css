@@ -90,3 +90,13 @@ body.detail-fanza header,body.detail-fanza footer{display:none}
 .grid.daily-grid{padding:8px 0 10px}
 .grid.daily-grid .card img{aspect-ratio:auto;height:auto;max-height:460px;object-fit:cover}
 @media (max-width:719px){.grid.daily-grid .card img{height:auto;max-height:300px}}
+
+/* トップの入口(FANZA/MGS各1つ) */
+.daily-entries{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0 4px}
+@media(min-width:720px){.daily-entries{grid-template-columns:1fr 1fr}}
+.daily-entry{display:flex;flex-direction:column;gap:4px;background:#202127;color:#fff;text-decoration:none;border-radius:14px;padding:20px 22px}
+.daily-entry-name{font-size:20px;font-weight:800}
+.daily-entry-sub{font-size:13px;color:#b9b9c2}
+.works-back{margin:16px 0 0}
+.works-back a{color:#2d6cdf;text-decoration:none;font-size:14px}
+.works-date{margin-top:-6px}
